@@ -1,0 +1,9 @@
+{
+  "name": "novapay-independent-gateway",
+  "main": "cloudflare/worker.mjs",
+  "compatibility_date": "2026-09-15",
+  "workers_dev": true,
+  "observability": {
+    "enabled": false
+  }
+}

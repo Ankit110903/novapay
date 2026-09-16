@@ -1,0 +1,17 @@
+[Unit]
+Description=NovaPay live AWS and Azure health monitoring
+After=network-online.target novapay-proxy.service
+Wants=network-online.target
+[Service]
+User=novapay
+Group=novapay
+WorkingDirectory=/opt/novapay
+EnvironmentFile=/opt/novapay/.env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/novapay/.venv/bin/python monitoring_daemon.py
+Restart=on-failure
+RestartSec=10
+NoNewPrivileges=true
+PrivateTmp=true
+[Install]
+WantedBy=multi-user.target

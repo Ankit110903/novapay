@@ -1,5 +1,7 @@
-# NovaPay deployment status
+# Deployment status
 
-AWS and the independent Cloudflare gateway are deployed. Gateway: https://novapay-independent-gateway.novapay-ankit110903.workers.dev
+AWS and the independent Cloudflare gateway passed their latest health checks. Azure's source build succeeded, but healthy startup and live cross-cloud failover remain unverified.
 
-Azure is unavailable with QuotaExceeded. Cross-cloud failover and session continuity have not yet been verified. This is an academic banking ledger without real payment rails. Runtime secrets are excluded from this repository.
+Runtime credentials are excluded from this repository. Configure them privately in your hosting provider. The application is an academic banking ledger and is not connected to real payment rails.
+
+Ten Python and eight gateway regression tests passed locally. The older AWS-hosted monitor does not record Cloudflare's per-request routing decisions.

@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}NovaPay Admin - Transaction Ledger Audit{% endblock %}
+
+{% block body_class %}admin-body{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-page admin-transactions-page stagger" data-admin-page="transactions">
+    <section class="admin-page-header">
+        <div>
+            <span class="admin-kicker">Ledger Operations</span>
+            <h2>Master Transaction Ledger</h2>
+            <p>Search, filter, inspect, and administratively reverse transactions across all NovaPay customer accounts.</p>
+        </div>
+        <div class="admin-header-actions">
+            <button type="button" class="btn btn-secondary admin-icon-button" id="admin-txns-refresh">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.7 6.3A8 8 0 1 0 20 12h-2a6 6 0 1 1-1.76-4.24L13 11h8V3z"/></svg>
+                Refresh
+            </button>
+            <a href="{{ url_for('admin.accounts_list') }}" class="btn btn-primary admin-icon-button">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 18v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1h-9a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2zm-9-2h10V8H12zm4-2.5A1.5 1.5 0 1 1 16 10a1.5 1.5 0 0 1 0 3.5z"/></svg>
+                Accounts
+            </a>
+        </div>
+    </section>
+
+    <section class="admin-user-summary-grid" aria-label="Transaction summary">
+        <button type="button" class="admin-summary-card active" data-txn-preset="all">
+            <span>Loaded Ledger</span>
+            <strong id="txns-total-count">0</strong>
+            <small>Latest events</small>
+        </button>
+        <button type="button" class="admin-summary-card" data-txn-preset="completed">
+            <span>Completed</span>
+            <strong id="txns-completed-count">0</strong>
+            <small>Settled movement</small>
+        </button>
+        <button type="button" class="admin-summary-card" data-txn-preset="reversed">
+            <span>Reversed</span>
+            <strong id="txns-reversed-count">0</strong>
+            <small>Admin controlled</small>
+        </button>
+        <button type="button" class="admin-summary-card" data-txn-preset="volume">
+            <span>Visible Volume</span>
+            <strong id="txns-visible-volume">£0.00</strong>
+            <small>After filters</small>
+        </button>
+    </section>
+
+    <section class="admin-filter-panel admin-ledger-filter-panel" aria-label="Ledger filters">
+        <label class="admin-search-field" for="admin-txn-search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16a6.471 6.471 0 0 0 4.23-1.57l.27.28v.79l5 4.99L20.49 19zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+            <input id="admin-txn-search" type="search" placeholder="Search reference, account, user, description, or email" autocomplete="off">
+        </label>
+
+        <label class="admin-filter-control" for="admin-txn-status-filter">
+            <span>Status</span>
+            <select id="admin-txn-status-filter">
+                <option value="all">All statuses</option>
+                <option value="completed">Completed</option>
+                <option value="pending">Pending</option>
+                <option value="failed">Failed</option>
+                <option value="reversed">Reversed</option>
+            </select>
+        </label>
+
+        <label class="admin-filter-control" for="admin-txn-type-filter">
+            <span>Type</span>
+            <select id="admin-txn-type-filter">
+                <option value="all">All types</option>
+                <option value="deposit">Deposit</option>
+                <option value="transfer">Transfer</option>
+                <option value="payment">Payment</option>
+                <option value="reversal">Reversal</option>
+            </select>
+        </label>
+
+        <label class="admin-filter-control" for="admin-txn-category-filter">
+            <span>Category</span>
+            <select id="admin-txn-category-filter">
+                <option value="all">All categories</option>
+                <option value="groceries">Groceries</option>
+                <option value="transport">Transport</option>
+                <option value="utilities">Utilities</option>
+                <option value="shopping">Shopping</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="salary">Salary</option>
+                <option value="savings">Savings</option>
+                <option value="other">Other</option>
+            </select>
+        </label>
+
+        <p class="admin-filter-result" id="admin-txn-result-count">Loading ledger...</p>
+    </section>
+
+    <section class="admin-table-panel">
+        <header class="admin-panel-header">
+            <div>
+                <span class="admin-kicker">Ledger</span>
+                <h3>Transaction Audit Table</h3>
+            </div>
+            <span class="admin-live-chip" id="admin-txn-ledger-chip">Latest 250</span>
+        </header>
+
+        <div class="admin-table-container">
+            <table class="admin-table" id="admin-txns-table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Reference Code</th>
+                        <th>Flow</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th class="admin-table-actions">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-txns-tbody">
+                    <tr>
+                        <td colspan="8" class="admin-empty-cell">Loading transaction logs...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block modals %}
+{% include "admin/_user_detail_modal.html" %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

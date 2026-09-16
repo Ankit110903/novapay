@@ -1,0 +1,18 @@
+[Unit]
+Description=NovaPay application routing gateway
+After=network-online.target novapay-bank.service
+Wants=network-online.target
+[Service]
+User=novapay
+Group=novapay
+WorkingDirectory=/opt/novapay
+EnvironmentFile=/opt/novapay/.env
+Environment=PROXY_STATE_FILE=/var/lib/novapay/route.json
+StateDirectory=novapay
+ExecStart=/opt/novapay/.venv/bin/gunicorn proxy_server:app --bind 127.0.0.1:8080 --workers 1 --threads 4 --timeout 60
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+[Install]
+WantedBy=multi-user.target
