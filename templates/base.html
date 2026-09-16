@@ -199,7 +199,7 @@
             </header>
             {% endif %}
 
-            {% if not current_user.is_authenticated %}
+            {% if not current_user.is_authenticated and request.endpoint != 'auth.login' %}
             <button type="button" class="app-back-button app-back-button-floating" data-back-button data-fallback-url="{{ url_for('auth.login') }}" aria-label="Go back to previous page">
                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                     <path d="M15 18l-6-6 6-6" />
