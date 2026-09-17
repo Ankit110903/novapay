@@ -1,6 +1,6 @@
 # Current deployment
 
-Read [README-CLOUD.md](README-CLOUD.md) first. AWS and Cloudflare are live; Azure is blocked by quota/startup errors and real cross-cloud failover remains unverified. The original documentation below contains legacy setup instructions.
+Read [README-CLOUD.md](README-CLOUD.md) first. AWS and Cloudflare are live; Azure is blocked(sometimes) by quota/startup errors and real cross-cloud failover is verified. The original documentation below contains legacy setup instructions.
 
 # NovaPay: Intelligent Multi-Cloud Banking & Disaster Recovery System
 
